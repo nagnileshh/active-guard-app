@@ -131,3 +131,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 GDAL_LIBRARY_PATH = '/opt/homebrew/Cellar/gdal/3.8.3/lib/libgdal.dylib'
 GEOS_LIBRARY_PATH = '/opt/homebrew/Cellar/geos/3.12.1/lib/libgeos_c.dylib'
 
+AUTHENTICATION_BACKENDS = ['app.backends.MobileAuthBackend']

@@ -114,3 +114,6 @@ dmypy.json
 *.log
 *.sql
 *.pid
+
+**/migrations/*.py
+**/migrations/*.pyc

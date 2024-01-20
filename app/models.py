@@ -10,6 +10,7 @@ from django.contrib.gis.geos import Point
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.hashers import make_password
+import uuid
 
 class MstOrg(models.Model):
     alphanumeric_special = RegexValidator(r'^[\w.@+-]*$', 'Only alphanumeric characters and @/./+/-/_ are allowed.')
@@ -201,3 +202,11 @@ class LogLoc(models.Model):
     class Meta:
         verbose_name = 'Location Log'
         verbose_name_plural = 'Location Logs'
+
+class Token(models.Model):
+    user = models.ForeignKey('MstUser', on_delete=models.CASCADE)
+    token = models.CharField(max_length=255, default=uuid.uuid4, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Token for {self.user.user_mob}"
