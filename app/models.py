@@ -9,7 +9,6 @@ from django.contrib.gis.db import models as gis_models
 from django.contrib.gis.geos import Point
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import gettext_lazy as _
-from django.contrib.auth.hashers import make_password
 import uuid
 
 class MstOrg(models.Model):
@@ -41,8 +40,7 @@ class MstUser(models.Model):
     org_id = models.IntegerField(null=True, blank=True)  # ForeignKey if there's an Org model for organization IDs
     fcm = models.CharField(max_length=255, null=True, blank=True)  # Assuming FCM is a string
     sup_id = models.IntegerField(null=True, blank=True)  # ForeignKey if it references another user
-    # USERNAME_FIELD = 'user_mob'
-    # REQUIRED_FIELDS = ['pin']
+    date_joined = models.DateTimeField(auto_now_add=True)
 
     # Add __str__ method to return a string representation of the user
     def __str__(self):
