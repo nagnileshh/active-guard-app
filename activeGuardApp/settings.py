@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -135,3 +136,16 @@ AUTHENTICATION_BACKENDS = [
     'app.backends.MobileAuthBackend',
     'django.contrib.auth.backends.ModelBackend'
     ]
+
+SIMPLE_JWT = {
+    'USER_ID_FIELD': 'user_id',
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),  # Example lifetime
+    # ... other JWT settings
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    # ... other DRF settings
+}
