@@ -6,6 +6,10 @@ from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import MstUser
 from django.contrib.auth.hashers import make_password
+from .models import MstLocation
+from .serializers import MstLocationSerializer
+from django.contrib.gis.geos import Point
+from django.contrib.gis.db.models.functions import Distance
 
 class LoginAPIView(APIView):
     def post(self, request):
@@ -62,3 +66,28 @@ class SignupAPIView(APIView):
 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        
+class LocationSuggestionView(APIView):
+    def get(self, request):
+        # Extract lati and longi from request query parameters
+        try:
+            user_lati = float(request.query_params.get('lati'))
+            user_longi = float(request.query_params.get('longi'))
+            print("lati:", user_lati, ",","longi:", user_longi )
+        except (TypeError, ValueError):
+            return Response({'error': 'Invalid latitude or longitude'}, 
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        # Create a Point object for the user's location
+        user_location = Point(user_longi, user_lati, srid=4326)
+
+        # Query the nearest locations
+        nearest_locations = MstLocation.objects.annotate(
+            distance=Distance('location', user_location)
+        ).order_by('distance')[:10] # Change 10 to your desired number of suggestions
+        for loc in nearest_locations:
+            print(loc.distance.km, loc.loc_name, "d")
+
+        # Serialize the queryset
+        serializer = MstLocationSerializer(nearest_locations, many=True)
+        return Response(serializer.data)

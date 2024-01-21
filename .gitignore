@@ -117,4 +117,3 @@ dmypy.json
 
 **/migrations/*.py
 **/migrations/*.pyc
-app/migrations/0001_initial.py
